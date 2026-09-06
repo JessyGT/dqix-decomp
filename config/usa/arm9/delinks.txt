@@ -61,9 +61,9 @@ src/Combat/Main/GetCombatantFromList.cpp:
 	complete
 	.text start:0x0200FE68 end:0x0200FEA4
 
-src/Combat/Main/SetBattleStructField0.cpp:
+src/Combat/Main/BattleStructField0.cpp:
     complete
-    .text start:0x0200fb84 end:0x0200fb8c
+    .text start:0x0200fb84 end:0x0200fb94
 
 src/Memory/SafeAllocator.cpp:
     complete
