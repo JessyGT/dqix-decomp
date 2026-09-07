@@ -1,4 +1,5 @@
 #pragma once
+#include "Combat/Main/UnknownContext.h"
 
 struct PrimaryCombatStats {
     unsigned short currHP;
@@ -38,7 +39,7 @@ struct CombatantStruct {
 };
 
 struct BattleStruct {
-    int unk0;
+    UnknownContext* unk0;
     int unk4;
     struct CombatantStruct* combatantList[0xe9]; // TODO: validate this size as well as this struct as a whole
 };
