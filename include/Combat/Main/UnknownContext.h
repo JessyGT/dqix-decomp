@@ -1,7 +1,8 @@
 #pragma once
 
-struct UnknownContext
-{
+struct UnknownContext {
+    // full size: 0x44C8 bytes
+
     unsigned int flags_00;
     unsigned int flags_04;
     unsigned int flags_08;
@@ -14,9 +15,11 @@ struct UnknownContext
     int subBrightnessTarget;
     int subBrightnessTimeRemaining;
 
-    unsigned char unk24;
-    unsigned char unk25;
+    unsigned char mainBrightnessLocked;
+    unsigned char subBrightnessLocked;
     unsigned char mainBrightnessDirty;
     unsigned char subBrightnessDirty;
-    unsigned char unk28;
+    unsigned char allowBrightnessApply;
+
+     // ... ~0x449F bytes still to understand
 };
