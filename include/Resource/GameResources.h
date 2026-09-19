@@ -16,7 +16,7 @@
 // much of the current type information comes from.
 //
 // Runtime tracing confirms that the same object is:
-// - returned by func_ov017_0218b5b0()
+// - returned by GetGameResources()
 // - passed to the brightness-management functions
 // - stored at BattleStruct + 0x0
 struct GameResources
@@ -434,33 +434,25 @@ struct TreasureMapLanguageDataOffsets
 
 
 // --------------------------------------------------------------------------
-// GameResources global-instance accessors
+// GameResources global-instance accessors (Overlay 17)
 // --------------------------------------------------------------------------
 //
-// These functions remain undecompiled Overlay 17 functions.
+// SetGameResources stores the global GameResources pointer.
+// GetGameResources returns that pointer.
 //
-// func_ov017_0218b5a0 stores the supplied GameResources pointer into a
-// globally-held slot.
-//
-// func_ov017_0218b5b0 returns the pointer stored in that same slot.
-//
-// Runtime tracing confirms that the returned object is the same instance
-// passed to the brightness-management functions and stored at
-// BattleStruct + 0x0.
-//
-// Working semantic names:
-//     func_ov017_0218b5a0 -> SetGameResources
-//     func_ov017_0218b5b0 -> GetGameResources
-//
-// Keep the original function symbols for now because Overlay 17 has not
-// been renamed/decompiled.
+// Runtime tracing confirms that this is the same instance passed to the
+// brightness-management functions and stored at BattleStruct + 0x0.
 
 #ifdef jpn
-    #define func_ov017_0218b5b0 func_ov017_0218c1d0
+    // JPN accessors still use their original symbols.
+    #define SetGameResources func_ov017_0218c1c0
+    #define GetGameResources func_ov017_0218c1d0
+    extern "C" void SetGameResources(GameResources* gameResources);
+    extern "C" GameResources* GetGameResources();
+#else
+    // USA: 0x0218b5a0
+    void SetGameResources(GameResources* gameResources);
+
+    // USA: 0x0218b5b0
+    GameResources* GetGameResources();
 #endif
-
-// USA: func_ov017_0218b5a0
-extern "C" void func_ov017_0218b5a0(GameResources *gameResources);
-
-// USA: func_ov017_0218b5b0
-extern "C" GameResources *func_ov017_0218b5b0();
