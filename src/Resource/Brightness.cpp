@@ -17,6 +17,11 @@ void func_020c39a0(volatile unsigned short *reg, int brightness);
 // get brightness from master register
 int func_020c39c8(volatile unsigned short *reg);
 
+// ARM runtime helper.
+// Kept as-is according to project convention: ARM/runtime-specific
+// implementation is not decompiled here.
+int _ffix(float value);
+
 void *func_020daf90();
 int func_020db9cc(void *unk, int screen, int brightness, unsigned int duration);
 }
@@ -258,26 +263,22 @@ unsigned short GetBrightnessTransitionStates(GameResources *resources) {
 // ========================================================
 
 // usa: func_0203b498
-unsigned int GetFlags00(GameResources* resources)
-{
+unsigned int GetFlags00(GameResources *resources) {
     return resources->flags_00;
 }
 
 // usa: func_0203b4a0
-void SetFlags00(GameResources* resources, unsigned int mask)
-{
+void SetFlags00(GameResources *resources, unsigned int mask) {
     resources->flags_00 |= mask;
 }
 
 // usa: func_0203b4b0
-void ClearFlags00(GameResources* resources, unsigned int mask)
-{
+void ClearFlags00(GameResources *resources, unsigned int mask) {
     resources->flags_00 &= ~mask;
 }
 
 // usa: func_0203b4c4
-unsigned int TestFlags00(GameResources* resources, unsigned int mask)
-{
+unsigned int TestFlags00(GameResources *resources, unsigned int mask) {
     return resources->flags_00 & mask;
 }
 
@@ -285,26 +286,22 @@ unsigned int TestFlags00(GameResources* resources, unsigned int mask)
 // =                      Flags 04                        =
 // ========================================================
 // usa: func_0203b4d0
-unsigned int GetFlags04(GameResources* resources)
-{
+unsigned int GetFlags04(GameResources *resources) {
     return resources->flags_04;
 }
 
 // usa: func_0203b4d8
-void SetFlags04(GameResources* resources, unsigned int mask)
-{
+void SetFlags04(GameResources *resources, unsigned int mask) {
     resources->flags_04 |= mask;
 }
 
 // usa: func_0203b4e8
-void ClearFlags04(GameResources* resources, unsigned int mask)
-{
+void ClearFlags04(GameResources *resources, unsigned int mask) {
     resources->flags_04 &= ~mask;
 }
 
 // usa: func_0203b4fc
-unsigned int TestFlags04(GameResources* resources, unsigned int mask)
-{
+unsigned int TestFlags04(GameResources *resources, unsigned int mask) {
     return resources->flags_04 & mask;
 }
 
@@ -313,26 +310,78 @@ unsigned int TestFlags04(GameResources* resources, unsigned int mask)
 // ========================================================
 
 // usa: func_0203b508
-unsigned int GetFlags08(GameResources* resources)
-{
+unsigned int GetFlags08(GameResources *resources) {
     return resources->flags_08;
 }
 
 // usa: func_0203b510
-void SetFlags08(GameResources* resources, unsigned int mask)
-{
+void SetFlags08(GameResources *resources, unsigned int mask) {
     resources->flags_08 |= mask;
 }
 
 // usa: func_0203b520
-void ClearFlags08(GameResources* resources, unsigned int mask)
-{
+void ClearFlags08(GameResources *resources, unsigned int mask) {
     resources->flags_08 &= ~mask;
 }
 
 // usa: func_0203b534
-unsigned int TestFlags08(GameResources* resources, unsigned int mask)
-{
+unsigned int TestFlags08(GameResources *resources, unsigned int mask) {
     return resources->flags_08 & mask;
 }
 
+// ========================================================
+// =              Brightness utilities again              =
+// ========================================================
+
+// usa: func_0203b540
+void WriteBrightnessToHardware(GameResources *gameResources) {
+    int brightness = _ffix(gameResources->mainBrightness);
+    func_020c39a0(REG_MASTER_BRIGHT, brightness);
+
+    brightness = _ffix(gameResources->subBrightness);
+    func_020c39a0(REG_MASTER_BRIGHT_SUB, brightness);
+}
+
+// usa: func_0203b57c
+int GetBrightness(GameResources *gameResources, int screen) {
+    if (screen == 0) return _ffix(gameResources->mainBrightness);
+
+    return _ffix(gameResources->subBrightness);
+}
+
+/// usa: func_0203b5a0
+bool IsBrightnessWithinValidRange(GameResources *gameResources, bool useSubScreen)
+{
+    int brightness;
+
+    if (useSubScreen == false)
+        brightness = _ffix(gameResources->mainBrightness);
+    else
+        brightness = _ffix(gameResources->subBrightness);
+
+    if (brightness > -16) {
+        if (brightness < 16)
+            return true;
+    }
+
+    return false;
+}
+
+// usa: func_0203b5e0
+bool IsBrightnessOutsideValidRange(GameResources *gameResources, bool useSubScreen)
+{
+    return IsBrightnessWithinValidRange(gameResources, useSubScreen) == false;
+}
+
+// usa: func_0203b5f8
+bool IsBrightnessZero(GameResources *gameResources, bool useSubScreen)
+{
+    int brightness;
+
+    if (useSubScreen == false)
+        brightness = _ffix(gameResources->mainBrightness);
+    else
+        brightness = _ffix(gameResources->subBrightness);
+
+    return brightness == 0;
+}
