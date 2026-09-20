@@ -87,7 +87,7 @@ void ProcessEntryContext(EntryContext *context) {
 
     EntryNode *entry = context->currentEntry;
 
-    if (entry != 0 && entry->field_01 != 0) {
+    if (entry != 0 && entry->type != 0) {
         GameResources *gameResources = GetGameResources();
 
         if (gameResources != 0) {

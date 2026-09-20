@@ -53,9 +53,13 @@ int _ffix(float value);
 }
 
 // usa: func_ov017_021b6290
-// Context is never used but need to be passed because it comes from an eventDispatcher with common signatures.
-void func_ov017_021b6290(void *entry, void *context) {
-    unsigned char *p = (unsigned char *) entry;
+//
+// Handler for EntryNode type 0x16.
+//
+// EntryContext is part of the common dispatcher handler signature,
+// but this particular handler does not use it.
+void func_ov017_021b6290(EntryNode *entry, EntryContext *context) {
+    EntryNode16 *entry16 = (EntryNode16 *) entry;
 
     GameState *gameState         = GameState::GetInstance();
     GameResources *gameResources = GetGameResources();
@@ -67,43 +71,43 @@ void func_ov017_021b6290(void *entry, void *context) {
 
     BackgroundLoader *backgroundLoader = BackgroundLoader::GetInstance();
 
-    void *unk_3718 = *(void **) ((unsigned char *) gameResources + 0x3718);
+    void *unk_3718 = gameResources->unknown_ptr_3718;
 
-    if (p[0xFC] == 0) {
+    if (entry16->state == 0) {
         func_020397cc(unknownGameObject, 1);
 
         *(unsigned short *) ((unsigned char *) unknownGameObject + 0xB2) = 0;
 
-        if (*(short *) (p + 0xFE) >= 0) {
+        if (entry16->parameter >= 0) {
             int taskId = backgroundLoader->QueueLoadFile(data_ov017_021d7c10, 0);
 
-            *(short *) (p + 0x100) = taskId;
+            entry16->loaderTaskId = taskId;
 
             func_0209c678(data_02109bf4, 10);
         }
 
-        if (*(short *) (p + 0xFE) <= 0) p[0xFD] = 0;
+        if (entry16->parameter <= 0) entry16->delay = 0;
 
-        if (p[8] != 0) {
+        if (entry16->field_08 != 0) {
             func_02012fe4();
             func_02017c58();
         }
 
-        p[0xFC] = 1;
+        entry16->state = 1;
     }
 
-    if (p[0xFD] != 0) p[0xFD]--;
+    if (entry16->delay != 0) entry16->delay--;
 
-    if (p[0xFC] == 1) {
-        if (func_02046cc8(p + 0xC) != 0) p[0xFC] = 2;
+    if (entry16->state == 1) {
+        if (func_02046cc8(entry16 + 0xC) != 0) entry16->state = 2;
 
         return;
     }
 
-    if (p[0xFC] == 2) {
-        if (p[0xFD] != 0) return;
+    if (entry16->state == 2) {
+        if (entry16->delay != 0) return;
 
-        short taskId = *(short *) (p + 0x100);
+        short taskId = entry16->loaderTaskId;
 
         int unk = 0x17;
 
@@ -114,25 +118,25 @@ void func_ov017_021b6290(void *entry, void *context) {
             unsigned int local_40;
             unsigned char local_38[0x14];
 
-            backgroundLoader->GetLoadedFileByID(*(short *) (p + 0x100), &local_3c, &local_40);
+            backgroundLoader->GetLoadedFileByID(entry16->loaderTaskId, &local_3c, &local_40);
 
             void *dataPtr = local_38;
 
-            if (func_02046b60(*(void **) ((unsigned char *) gameResources + 0x36FC), 10) != 0) {
+            if (func_02046b60(gameResources->entryContext_36FC, 10) != 0) {
                 void *result = func_ov017_021b8478(unk_3718);
 
                 if (result != 0) dataPtr = (unsigned char *) result + 0x10;
             }
 
-            if (func_0207416c(dataPtr, *(short *) (p + 0xFE), local_3c, local_40) != 0) {
+            if (func_0207416c(dataPtr, entry16->parameter, local_3c, local_40) != 0) {
                 unk = *(unsigned short *) ((unsigned char *) dataPtr + 0xE);
             }
 
-            taskId = *(short *) (p + 0x100);
+            taskId = entry16->loaderTaskId;
 
             backgroundLoader->RemoveTask(taskId);
 
-            *(short *) (p + 0x100) = -1;
+            entry16->loaderTaskId = -1;
         }
 
         func_0209c480(data_02109bf4, unk);
@@ -152,21 +156,21 @@ void func_ov017_021b6290(void *entry, void *context) {
 
             if (GetBrightness(gameResources, true) == 0) SetSubBrightness(gameResources, -16, 15);
 
-            p[0xFC] = 4;
+            entry16->state = 4;
         } else {
-            p[0xFC] = 3;
+            entry16->state = 3;
         }
 
         return;
     }
 
-    if (p[0xFC] == 3) {
-        if (func_0204700c(p + 0xC) != 0) p[0xFC] = 4;
+    if (entry16->state == 3) {
+        if (func_0204700c(entry16 + 0xC) != 0) entry16->state = 4;
 
         return;
     }
 
-    if (p[0xFC] == 4) {
+    if (entry16->state == 4) {
         if (IsBrightnessTransitionActive(gameResources) != 0) return;
 
         SetFlags04(gameResources, 0x04);
@@ -177,8 +181,8 @@ void func_ov017_021b6290(void *entry, void *context) {
         void *unk = func_020d6c00();
         func_020466e4(unk, 1);
 
-        func_02047198(p + 0xC);
-        func_02046f84(p + 0xC);
+        func_02047198(entry16 + 0xC);
+        func_02046f84(entry16 + 0xC);
 
         func_ov017_0218d274(gameResources);
         func_ov017_0218f79c(gameResources);
@@ -187,6 +191,6 @@ void func_ov017_021b6290(void *entry, void *context) {
         unk = func_0203cf4c();
         func_0203e5d8(unk, 1);
 
-        p[1] = 1;
+        entry16->base.completed = 1;
     }
 }
