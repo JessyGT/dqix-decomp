@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Memory/SafeAllocator.h"
+#include "Resource/EntryContext.h"
 
 // sizeof == 0x44c8, or 0x4218 in JPN version.
 //
@@ -19,8 +20,7 @@
 // - returned by GetGameResources()
 // - passed to the brightness-management functions
 // - stored at BattleStruct + 0x0
-struct GameResources
-{
+struct GameResources {
     // +0x00
     //
     // First 32-bit flag bank.
@@ -45,8 +45,7 @@ struct GameResources
     // Constants for known masks within flags_08.
     //
     // These are masks only and occupy no space in a GameResources instance.
-    struct Flags08
-    {
+    struct Flags08 {
         // +0x08 mask 0x02
         //
         // Affects candidate filtering in func_ov017_0218e8c8.
@@ -199,8 +198,7 @@ struct GameResources
 
     // USA: +0x12c8
     // JPN: +0x10b8
-    struct Substruct_12C8
-    {
+    struct Substruct_12C8 {
         char unknown_0[4];
 
         SafeAllocator allocator_array_4[10];
@@ -231,8 +229,7 @@ struct GameResources
 
     // USA: +0x2b90
     // JPN: +0x2980
-    struct Substruct_2b90
-    {
+    struct Substruct_2b90 {
         char unknown[0x88];
 
     } substruct_array_2b90[0x12];
@@ -288,23 +285,25 @@ struct GameResources
 
     // +0x36fc
     // JPN: +0x34ec
-    void *unknown_ptr_array_36fc[7];
+    EntryContext *entryContext_36FC;
+    EntryContext *entryContext_3700;
+    EntryContext *entryContext_3704;
+
+    void *unknown_ptr_array_3708[4];
 
     void *unknown_ptr_3718;
     void *unknown_ptr_array_371c[8];
 
     // USA: +0x373c
     // JPN: +0x352c
-    struct Substruct_373c
-    {
+    struct Substruct_373c {
         char unknown[0x48];
 
     } substruct_array_373c[0xc];
 
     // USA: +0x3a9c
     // JPN: +0x388c
-    struct Substruct_3a9c
-    {
+    struct Substruct_3a9c {
 #if defined(usa)
         char unknown[0x18];
 #elif defined(jpn)
@@ -319,16 +318,14 @@ struct GameResources
 
     // USA: +0x3bc8
     // JPN: +0x39a8
-    struct Substruct_3bc8
-    {
+    struct Substruct_3bc8 {
         char unknown[0x14];
 
     } substruct_array_3bc8[3];
 
     // USA: +0x3c04
     // JPN: +0x39e4
-    struct Substruct_3c04
-    {
+    struct Substruct_3c04 {
         char unknown[0x28];
 
     } substruct_array_3c04[4];
@@ -385,9 +382,17 @@ struct GameResources
     void *unknown_ptr_4328;
 
 #if defined(usa)
-    char unknown_432c[0xf0];
+    // +0x432c .. +0x4353
+    char unknown_432c[0x28];
+
+    // +0x4354
+    unsigned char unknown_4354;
+
+    // +0x4355 .. +0x441b
+    char unknown_4355[0xc7];
+
 #elif defined(jpn)
-    // JPN: +0x410c
+    // JPN layout still unknown here.
     char unknown_432c[0x60];
 #endif
 
@@ -407,12 +412,10 @@ struct GameResources
     void *unknown_ptr_44c4;
 };
 
-
 // sizeof == 0x44
 //
 // Needs to eventually be moved back to the grotto-related code.
-struct TreasureMapLanguageDataOffsets
-{
+struct TreasureMapLanguageDataOffsets {
     unsigned int bossRangesByQuality;
     unsigned int bossIDsAndWeights;
     unsigned int environs;
@@ -432,7 +435,6 @@ struct TreasureMapLanguageDataOffsets
     unsigned int legacyBossData;
 };
 
-
 // --------------------------------------------------------------------------
 // GameResources global-instance accessors (Overlay 17)
 // --------------------------------------------------------------------------
@@ -447,12 +449,12 @@ struct TreasureMapLanguageDataOffsets
     // JPN accessors still use their original symbols.
     #define SetGameResources func_ov017_0218c1c0
     #define GetGameResources func_ov017_0218c1d0
-    extern "C" void SetGameResources(GameResources* gameResources);
-    extern "C" GameResources* GetGameResources();
+extern "C" void SetGameResources(GameResources *gameResources);
+extern "C" GameResources *GetGameResources();
 #else
-    // USA: 0x0218b5a0
-    void SetGameResources(GameResources* gameResources);
+// USA: 0x0218b5a0
+void SetGameResources(GameResources *gameResources);
 
-    // USA: 0x0218b5b0
-    GameResources* GetGameResources();
+// USA: 0x0218b5b0
+GameResources *GetGameResources();
 #endif
