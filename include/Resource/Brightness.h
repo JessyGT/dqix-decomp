@@ -40,3 +40,24 @@ int GetMainBrightnessTransitionState(GameResources* resources);
 int GetSubBrightnessTransitionState(GameResources* resources);
 
 unsigned short GetBrightnessTransitionStates(GameResources* resources);
+
+unsigned int GetFlags00(GameResources* resources);
+void SetFlags00(GameResources* resources, unsigned int mask);
+void ClearFlags00(GameResources* resources, unsigned int mask);
+unsigned int TestFlags00(GameResources* resources, unsigned int mask);
+
+unsigned int GetFlags04(GameResources* resources);
+void SetFlags04(GameResources* resources, unsigned int mask);
+void ClearFlags04(GameResources* resources, unsigned int mask);
+unsigned int TestFlags04(GameResources* resources, unsigned int mask);
+
+unsigned int GetFlags08(GameResources* resources);
+void SetFlags08(GameResources* resources, unsigned int mask);
+void ClearFlags08(GameResources* resources, unsigned int mask);
+unsigned int TestFlags08(GameResources* resources, unsigned int mask);
+
+void WriteBrightnessToHardware(GameResources* gameResources);
+int GetBrightness(GameResources* gameResources, bool useSubScreen);
+bool IsBrightnessWithinValidRange(GameResources* gameResources, bool useSubScreen);
+bool IsBrightnessOutsideValidRange(GameResources* gameResources, bool useSubScreen);
+bool IsBrightnessZero(GameResources* gameResources, bool useSubScreen);
