@@ -343,8 +343,8 @@ void WriteBrightnessToHardware(GameResources *gameResources) {
 }
 
 // usa: func_0203b57c
-int GetBrightness(GameResources *gameResources, int screen) {
-    if (screen == 0) return _ffix(gameResources->mainBrightness);
+int GetBrightness(GameResources *gameResources, bool useSubScreen) {
+    if (useSubScreen == false) return _ffix(gameResources->mainBrightness);
 
     return _ffix(gameResources->subBrightness);
 }
