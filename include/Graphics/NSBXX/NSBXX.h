@@ -738,6 +738,9 @@ void NSBXX_Model_SetDiffuseReflectionColor(NSBXXInternalModel* model, int rgb);
 // color to be specified with red in bits 0-4, green in bits 5-9, blue in bits 10-14
 void NSBXX_Model_SetAmbientReflectionColor(NSBXXInternalModel* model, int col);
 
+// usa: func_020b72ec
+void NSBXX_Model_SetPolygonID(NSBXXInternalModel* model, int id);
+
 // usa: func_020b732c
 // The alpha value can be between 0-31.
 void NSBXX_Model_SetAlpha(NSBXXInternalModel* model, int alpha);

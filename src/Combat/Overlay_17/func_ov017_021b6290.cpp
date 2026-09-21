@@ -2,6 +2,7 @@
 #include "GameState/GameState.h"
 #include "Resource/Brightness.h"
 #include "Resource/GameResources.h"
+#include "Combat/Overlay_17/EntryProcessing.h"
 #include <globaldefs.h>
 
 extern "C" {
