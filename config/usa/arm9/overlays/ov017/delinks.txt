@@ -9,7 +9,7 @@
 src/Resource/GameResources.cpp:
     .text start:0x0218b5a0 end:0x0218b5c0
 
-src/Combat/Overlay_17/func_ov017_021b6290.cpp:
+src/Combat/Overlay_17/HandleEventBattleEntry.cpp:
     .text start:0x021B6290 end:0x021B65BC
 
 src/Combat/Overlay_17/EntryProcessing.cpp:

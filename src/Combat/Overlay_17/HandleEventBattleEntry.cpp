@@ -53,7 +53,7 @@ int _ffix(float value);
 //
 // EntryContext is part of the common dispatcher handler signature,
 // but this particular handler does not use it.
-void func_ov017_021b6290(EntryNode *entry, EntryContext *context) {
+void HandleEventBattleEntry(EntryNode *entry, EntryContext *context) {
     EntryNode16 *entry16 = (EntryNode16 *) entry;
 
     GameState *gameState = GameState::GetInstance();
