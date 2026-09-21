@@ -1,3 +1,4 @@
+#include "Combat/Main/EventBattleScript.h"
 #include "Combat/Overlay_17/EntryProcessing.h"
 #include "Filesystem/BackgroundLoader.h"
 #include "GameState/GameState.h"
@@ -20,8 +21,6 @@ void func_0209c2e0(void *param_1, int param_2, int param_3);
 void func_0205e944(void *param_1, int param_2);
 
 void *func_ov017_021b8478(void *param_1);
-
-int func_0207416c(void *param_1, int param_2, void *param_3, unsigned int param_4);
 
 void *func_020421a0();
 void func_02043124();
@@ -56,13 +55,13 @@ int _ffix(float value);
 void HandleEventBattleEntry(EntryNode *entry, EntryContext *context) {
     EntryNode16 *entry16 = (EntryNode16 *) entry;
 
-    GameState *gameState = GameState::GetInstance();
+    GameState *gameState         = GameState::GetInstance();
     GameResources *gameResources = GetGameResources();
 
     func_02012fe4();
 
     void *unknownGameObject = gameState->GetUnknownGameObject();
-    void *unk_704fc = func_020704fc();
+    void *unk_704fc         = func_020704fc();
 
     BackgroundLoader *backgroundLoader = BackgroundLoader::GetInstance();
 
@@ -123,7 +122,7 @@ void HandleEventBattleEntry(EntryNode *entry, EntryContext *context) {
                 if (result != 0) dataPtr = (unsigned char *) result + 0x10;
             }
 
-            if (func_0207416c(dataPtr, entry16->parameter, local_3c, local_40) != 0) {
+            if (ExecuteEventBattleScript(dataPtr, entry16->parameter, local_3c, local_40) != 0) {
                 unk = *(unsigned short *) ((unsigned char *) dataPtr + 0xE);
             }
 
