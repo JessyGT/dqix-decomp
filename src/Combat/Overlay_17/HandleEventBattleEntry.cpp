@@ -110,20 +110,20 @@ void HandleEventBattleEntry(EntryNode *entry, EntryContext *context) {
 
             void *local_3c;
             unsigned int local_40;
-            unsigned char local_38[0x14];
+            EventBattleConfig battleConfig;
 
             backgroundLoader->GetLoadedFileByID(entry16->loaderTaskId, &local_3c, &local_40);
 
-            void *dataPtr = local_38;
+            EventBattleConfig *dataPtr = &battleConfig;
 
             if (HasEntryType(gameResources->entryContext_36FC, 10) != 0) {
                 void *result = func_ov017_021b8478(unk_3718);
 
-                if (result != 0) dataPtr = (unsigned char *) result + 0x10;
+                if (result != 0) dataPtr = (EventBattleConfig *) ((unsigned char *) result + 0x10);
             }
 
             if (ExecuteEventBattleScript(dataPtr, entry16->parameter, local_3c, local_40) != 0) {
-                unk = *(unsigned short *) ((unsigned char *) dataPtr + 0xE);
+                unk = dataPtr->field_0E;
             }
 
             taskId = entry16->loaderTaskId;
